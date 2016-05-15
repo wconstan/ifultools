@@ -27,7 +27,8 @@ static char whatssi[] = "@(#) $File: //depot/Research/ifultools/pkg/ifultools/sr
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <stdint.h>
+#include <inttypes.h>
 
 /*
   This file contains function definitions for
@@ -75,8 +76,10 @@ static double localfn_random_normal_deviate_marsaglia(
 
 /* static variables for the random number generator */
 
-static short mother1[10];
-static short mother2[10];
+/* static short mother1[10]; */
+/* static short mother2[10]; */
+static int16_t mother1[10];
+static int16_t mother2[10];
 static boolean INITIALIZE_RANDOM_NUMBER_GENERATOR = FALSE;
 
 #define m16Long    65536L        /* 2^16                   */
@@ -1226,17 +1229,18 @@ static mutil_errcode localfn_recenter_data(
 static double localfn_random_uniform_deviate_marsaglia(
   unsigned long *pSeed )
 {
-  unsigned long number, number1, number2;
+  //unsigned long number, number1, number2;
+  uint32_t number, number1, number2;
+    
+  int16_t n, *p;
 
-  short n, *p;
-
-  unsigned short sNumber;
+  uint16_t sNumber;
 
   /* Initialize motheri with 9 random values the first time */
 
   if ( INITIALIZE_RANDOM_NUMBER_GENERATOR ){
 
-    sNumber = (unsigned short) (*pSeed & m16Mask);   /* The low 16 bits */
+    sNumber = (uint16_t) (*pSeed & m16Mask);   /* The low 16 bits */
     number  = *pSeed & m31Mask;   /* Only want 31 bits */
 
     p = mother1;
@@ -1245,12 +1249,12 @@ static double localfn_random_uniform_deviate_marsaglia(
 
       number = 30903 * sNumber + ( number >> 16 );   /* One line multiply-with-carry */
 
-      sNumber = (unsigned short) ( number & m16Mask );
+      sNumber = (uint16_t) ( number & m16Mask );
 
-      *p++ = (short) ( number & m16Mask );
+      *p++ = (int16_t) ( number & m16Mask );
 
       if ( n == 9 ){
-	p = mother2;
+	      p = mother2;
       }
     }
 
@@ -1265,13 +1269,15 @@ static double localfn_random_uniform_deviate_marsaglia(
 
   /* (void *) memmove( mother1 + 2, mother1 + 1, 8 * sizeof(short) ); */
   /* (void *) memmove( mother2 + 2, mother2 + 1, 8 * sizeof(short) ); */
-  memmove( mother1 + 2, mother1 + 1, 8 * sizeof(short) );
-  memmove( mother2 + 2, mother2 + 1, 8 * sizeof(short) );
+  memmove( mother1 + 2, mother1 + 1, 8 * sizeof(int16_t) );
+  memmove( mother2 + 2, mother2 + 1, 8 * sizeof(int16_t) );
 
   /* Put the carry values in numberi */
 
   number1 = mother1[ 0 ];
   number2 = mother2[ 0 ];
+  
+  printf("\nnumber1: %" PRIu32 ", mother1[0]: %" PRIi16 "\n", number1, mother1[0]);
 
   /* Form the linear combinations */
 
@@ -1285,17 +1291,17 @@ static double localfn_random_uniform_deviate_marsaglia(
 
   /* Save the high bits of numberi as the new carry */
 
-  mother1[ 0 ] = (short) ( number1 / m16Long );
-  mother2[ 0 ] = (short) ( number2 / m16Long );
+  mother1[ 0 ] = (int16_t) ( number1 / m16Long );
+  mother2[ 0 ] = (int16_t) ( number2 / m16Long );
 
   /* Put the low bits of numberi into motheri[1] */
 
-  mother1[ 1 ] = (short) ( m16Mask & number1 );
-  mother2[ 1 ] = (short) ( m16Mask & number2 );
+  mother1[ 1 ] = (int16_t) ( m16Mask & number1 );
+  mother2[ 1 ] = (int16_t) ( m16Mask & number2 );
 
   /* Combine the two 16 bit random numbers into one 32 bit */
 
-  *pSeed = ( ( (long) mother1[ 1 ] ) << 16 ) + (long) mother2[ 1 ];
+  *pSeed = ( ( (int32_t) mother1[ 1 ] ) << 16 ) + (int32_t) mother2[ 1 ];
 
   /* Return a double value between 0 and 1 */
 
