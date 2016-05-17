@@ -1277,7 +1277,7 @@ static double localfn_random_uniform_deviate_marsaglia(
   number1 = mother1[ 0 ];
   number2 = mother2[ 0 ];
   
-  printf("\nnumber1: %" PRIu32 ", mother1[0]: %" PRIi16 "\n", number1, mother1[0]);
+  /* printf("\nnumber1: %" PRIu32 ", mother1[0]: %" PRIi16 "\n", number1, mother1[0]); */
 
   /* Form the linear combinations */
 
