@@ -1,7 +1,7 @@
 Package: ifultools
 Title: Insightful Research Tools
 Version: 2.0-4
-Authors@R: person("William", "Constantine", email = "wlbconstan@gmail.com", role = "cre")
+Authors@R: person("William", "Constantine", email = "wlbconstan@gmail.com", role = c("cre", "aut"))
 Depends: R (>= 3.0.2)
 Imports: 
   MASS,
