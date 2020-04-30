@@ -1,15 +1,15 @@
 Package: ifultools
 Title: Insightful Research Tools
-Version: 2.0-5
+Version: 2.0-6
 Authors@R: person("William", "Constantine", email = "wlbconstan@gmail.com", role = c("cre", "aut"))
 Depends: R (>= 3.0.2)
-Imports: 
+Imports:
   MASS,
   methods,
   splus2R (>= 1.2-0)
 Description: Insightful Research Tools.
 License: GPL-2
-Collate: 
+Collate:
   it_mutils.R
   it_plot.R
   it_util.R
@@ -17,4 +17,3 @@ Collate:
   package.R
 Repository: CRAN
 NeedsCompilation: yes
-
